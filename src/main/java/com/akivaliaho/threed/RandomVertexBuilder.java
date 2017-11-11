@@ -1,5 +1,6 @@
 package com.akivaliaho.threed;
 
+import javafx.geometry.Point2D;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
 
@@ -7,7 +8,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
-import java.util.stream.Collectors;
 
 class RandomVertexBuilder extends RandomBuilder {
     private final List<Sphere> spheres;
@@ -26,21 +26,31 @@ class RandomVertexBuilder extends RandomBuilder {
     }
 
     private void buildBetweenEdges(List<DirectionalCylinder> cylinders, Deque<Sphere> sphereDeque) {
+        int poppedNumber = 0;
         while (!sphereDeque.isEmpty()) {
             Sphere pop = sphereDeque.pop();
-            tryToCreateDirectionalCylinder(cylinders, pop);
+            tryToCreateDirectionalCylinder(cylinders, pop, poppedNumber);
+            poppedNumber++;
         }
     }
 
-    private void tryToCreateDirectionalCylinder(List<DirectionalCylinder> cylinders, Sphere pop) {
-        cylinders.addAll(spheres.stream()
-                .filter(sphere -> yesOrNo())
-                .map(sphere -> buildCylinderToPopped(sphere, pop))
-                .collect(Collectors.toList()));
+    private void tryToCreateDirectionalCylinder(List<DirectionalCylinder> cylinders, Sphere pop, int poppedNumber) {
+        List<DirectionalCylinder> list = new ArrayList<>();
+        for (int i = 0; i < spheres.size(); i++) {
+            //Avoid cycles
+            if (i == poppedNumber) {
+                continue;
+            }
+            if (yesOrNo()) {
+                DirectionalCylinder directionalCylinder = buildCylinderToPopped(spheres.get(i), pop);
+                list.add(directionalCylinder);
+            }
+        }
+        cylinders.addAll(list);
     }
 
     private DirectionalCylinder buildCylinderToPopped(Sphere to, Sphere from) {
-        DirectionalCylinder directionalCylinder = new DirectionalCylinder(5, 30);
+        DirectionalCylinder directionalCylinder = new DirectionalCylinder(3, 100);
         translateCylinderToFrom(from, directionalCylinder);
 
         rotateCylinderTowardsTo(to, directionalCylinder);
@@ -49,12 +59,61 @@ class RandomVertexBuilder extends RandomBuilder {
     }
 
     private void rotateCylinderTowardsTo(Sphere to, DirectionalCylinder directionalCylinder) {
+        Point2D YAxle = new Point2D(0, 1);
+        Point2D negativeYAxle = new Point2D(0, -1);
+        Point2D cylinderPointXY = new Point2D(directionalCylinder.getTranslateX(), directionalCylinder.getTranslateY());
+
+        //Find closest angle to yAxle
         double toTranslateX = to.getTranslateX();
         double toTranslateY = to.getTranslateY();
         double toTranslateZ = to.getTranslateZ();
-        //TODO
+
+        Point2D toPointXY = new Point2D(toTranslateX, toTranslateY);
+
+        double value = setPerpendularAndFindRotation(directionalCylinder, toPointXY);
+
+//        directionalCylinder.getTransforms().add(new Rotate(value, 0, 0));
+        directionalCylinder.setHeight(toPointXY.distance(cylinderPointXY));
 
     }
+
+    private double setPerpendularAndFindRotation(DirectionalCylinder directionalCylinder, Point2D toPointXY) {
+        Point2D yAxle = new Point2D(0, 1);
+        Point2D negativeYAxle = new Point2D(0, -1);
+
+        if (directionalCylinder.getTranslateY() < 0) {
+            if (directionalCylinder.getTranslateX() < 0) {
+                perpendularsmallerThanYAndX(directionalCylinder, negativeYAxle);
+                if (directionalCylinder.getTranslateX() < toPointXY.getX()) {
+                    if (directionalCylinder.getTranslateY() < toPointXY.getY()) {
+                        //Check angles in different quadrants
+                        findClosestAngleToYAxle(toPointXY);
+                        directionalCylinder.setRotate(toPointXY.angle(directionalCylinder.getTranslateX(), directionalCylinder.getTranslateY()));
+                    }
+                }
+            } else {
+                directionalCylinder.setRotate(180 + negativeYAxle.angle(directionalCylinder.getTranslateX(), directionalCylinder.getTranslateY()));
+            }
+        } else {
+            if (directionalCylinder.getTranslateX() < 0) {
+                double angle = yAxle.angle(directionalCylinder.getTranslateX(), directionalCylinder.getTranslateY());
+                directionalCylinder.setRotate(angle);
+            } else {
+                directionalCylinder.setRotate(180 - yAxle.angle(directionalCylinder.getTranslateX(), directionalCylinder.getTranslateY()));
+            }
+        }
+        return 0;
+    }
+
+    private void findClosestAngleToYAxle(Point2D toPointXY) {
+        //TODO
+    }
+
+    private void perpendularsmallerThanYAndX(DirectionalCylinder directionalCylinder, Point2D negativeYAxle) {
+        double angle = negativeYAxle.angle(directionalCylinder.getTranslateX(), directionalCylinder.getTranslateY());
+        directionalCylinder.setRotate(180 - angle);
+    }
+
 
     private void translateCylinderToFrom(Sphere from, DirectionalCylinder directionalCylinder) {
         double translateX = from.getTranslateX();

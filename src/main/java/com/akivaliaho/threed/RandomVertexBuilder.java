@@ -50,7 +50,7 @@ class RandomVertexBuilder extends RandomBuilder {
     }
 
     private DirectionalCylinder buildCylinderToPopped(Sphere to, Sphere from) {
-        DirectionalCylinder directionalCylinder = new DirectionalCylinder(3, 100);
+        DirectionalCylinder directionalCylinder = new DirectionalCylinder(1, 100);
         translateCylinderToFrom(from, directionalCylinder);
 
         rotateCylinderTowardsTo(to, directionalCylinder);
@@ -78,40 +78,8 @@ class RandomVertexBuilder extends RandomBuilder {
     }
 
     private double setPerpendularAndFindRotation(DirectionalCylinder directionalCylinder, Point2D toPointXY) {
-        Point2D yAxle = new Point2D(0, 1);
-        Point2D negativeYAxle = new Point2D(0, -1);
-
-        if (directionalCylinder.getTranslateY() < 0) {
-            if (directionalCylinder.getTranslateX() < 0) {
-                perpendularsmallerThanYAndX(directionalCylinder, negativeYAxle);
-                if (directionalCylinder.getTranslateX() < toPointXY.getX()) {
-                    if (directionalCylinder.getTranslateY() < toPointXY.getY()) {
-                        //Check angles in different quadrants
-                        findClosestAngleToYAxle(toPointXY);
-                        directionalCylinder.setRotate(toPointXY.angle(directionalCylinder.getTranslateX(), directionalCylinder.getTranslateY()));
-                    }
-                }
-            } else {
-                directionalCylinder.setRotate(180 + negativeYAxle.angle(directionalCylinder.getTranslateX(), directionalCylinder.getTranslateY()));
-            }
-        } else {
-            if (directionalCylinder.getTranslateX() < 0) {
-                double angle = yAxle.angle(directionalCylinder.getTranslateX(), directionalCylinder.getTranslateY());
-                directionalCylinder.setRotate(angle);
-            } else {
-                directionalCylinder.setRotate(180 - yAxle.angle(directionalCylinder.getTranslateX(), directionalCylinder.getTranslateY()));
-            }
-        }
-        return 0;
-    }
-
-    private void findClosestAngleToYAxle(Point2D toPointXY) {
-        //TODO
-    }
-
-    private void perpendularsmallerThanYAndX(DirectionalCylinder directionalCylinder, Point2D negativeYAxle) {
-        double angle = negativeYAxle.angle(directionalCylinder.getTranslateX(), directionalCylinder.getTranslateY());
-        directionalCylinder.setRotate(180 - angle);
+        ZRotator ZRotator = new ZRotator(directionalCylinder);
+        return ZRotator.findAngleTowardsPoint(toPointXY);
     }
 
 

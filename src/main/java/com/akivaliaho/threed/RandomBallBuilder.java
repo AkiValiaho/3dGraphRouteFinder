@@ -19,7 +19,6 @@ class RandomBallBuilder extends RandomBuilder {
 
         List<Sphere> sphereList = new ArrayList<>();
         int i = nextInt(10) + 2;
-        i = 2;
         for (int j = 0; j < i; j++) {
             Sphere sphere = new Sphere(10);
             findNonCollidingPlace(sphere, sphereList);

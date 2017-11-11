@@ -14,3 +14,8 @@ Building:
 Screenshot of the projects current state
 ![alt text](https://github.com/AkiValiaho/3dGraphRouteFinder/blob/master/screenshot.png?raw=true)
 
+News:
+   
+    Added perpendicular to axes type of rotation to the vertices.
+    From this it's more easy to calculate Z-axis rotation and then
+    add an active transformer for X-axis rotation.

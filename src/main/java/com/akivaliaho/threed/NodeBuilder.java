@@ -120,13 +120,9 @@ public class NodeBuilder {
         //Kill all old edges and vertices from the graph
         world.getChildren().clear();
         buildAxes();
-        final PhongMaterial redMaterial = new PhongMaterial();
-        redMaterial.setDiffuseColor(Color.DARKRED);
-        redMaterial.setSpecularColor(Color.RED);
+        final PhongMaterial redMaterial = createMaterial(Color.DARKRED, Color.RED);
 
-        final PhongMaterial blackmaterial = new PhongMaterial();
-        blackmaterial.setDiffuseColor(Color.BLACK);
-        blackmaterial.setSpecularColor(Color.BLANCHEDALMOND);
+        final PhongMaterial blackmaterial = createMaterial(Color.BLACK, Color.BLANCHEDALMOND);
 
         Transformer graphComponentGroup = new Transformer();
         Transformer graphTransformer = new Transformer();
@@ -134,7 +130,7 @@ public class NodeBuilder {
 
         Transformer edgeTransformer = new Transformer();
         graphTransformer.getChildren().add(edgeTransformer);
-        List<Sphere> spheres = new RandomBallBuilder(new CoordinateConstraint(100, 100, 100)).generateRandomNumberOfBalls(edgeTransformer);
+        List<Sphere> spheres = new RandomBallBuilder(new CoordinateConstraint(100, 100, 100)).generateRandomNumberOfBalls(edgeTransformer, redMaterial);
         edgeTransformer.getChildren().addAll(spheres);
         edgeTransformer.setTx(100);
 
@@ -145,17 +141,11 @@ public class NodeBuilder {
     }
 
     private void buildAxes() {
-        final PhongMaterial redMaterial = new PhongMaterial();
-        redMaterial.setDiffuseColor(Color.DARKRED);
-        redMaterial.setSpecularColor(Color.RED);
+        final PhongMaterial redMaterial = createMaterial(Color.DARKRED, Color.RED);
 
-        final PhongMaterial greenMaterial = new PhongMaterial();
-        greenMaterial.setDiffuseColor(Color.DARKGREEN);
-        greenMaterial.setSpecularColor(Color.GREEN);
+        final PhongMaterial greenMaterial = createMaterial(Color.DARKGREEN, Color.GREEN);
 
-        final PhongMaterial blueMaterial = new PhongMaterial();
-        blueMaterial.setDiffuseColor(Color.DARKBLUE);
-        blueMaterial.setSpecularColor(Color.BLUE);
+        final PhongMaterial blueMaterial = createMaterial(Color.DARKBLUE, Color.BLUE);
 
         final Box xAxis = new Box(AXIS_LENGTH, 1, 1);
         final Box yAxis = new Box(1, AXIS_LENGTH, 1);
@@ -168,6 +158,13 @@ public class NodeBuilder {
         axisGroup.getChildren().addAll(xAxis, yAxis, zAxis);
         axisGroup.setVisible(false);
         world.getChildren().addAll(axisGroup);
+    }
+
+    private PhongMaterial createMaterial(Color diffuseColor, Color specularColor) {
+        final PhongMaterial blueMaterial = new PhongMaterial();
+        blueMaterial.setDiffuseColor(diffuseColor);
+        blueMaterial.setSpecularColor(specularColor);
+        return blueMaterial;
     }
 
 }

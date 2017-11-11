@@ -1,6 +1,5 @@
 package com.akivaliaho.threed;
 
-import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
 
@@ -11,18 +10,14 @@ import java.util.Random;
 class RandomBallBuilder {
 
     private static final int CONFLICT_CONSTANT = 10;
-    private final PhongMaterial redMaterial;
     private final CoordinateConstraint coordinateConstraint;
     private Random random;
 
     RandomBallBuilder(CoordinateConstraint coordinateConstraint) {
         this.coordinateConstraint = coordinateConstraint;
-        redMaterial = new PhongMaterial();
-        redMaterial.setDiffuseColor(Color.DARKRED);
-        redMaterial.setSpecularColor(Color.RED);
     }
 
-    List<Sphere> generateRandomNumberOfBalls(Transformer edgeTransformer) {
+    List<Sphere> generateRandomNumberOfBalls(Transformer edgeTransformer, PhongMaterial ballMaterial) {
 
         List<Sphere> sphereList = new ArrayList<>();
         random = new Random();
@@ -30,7 +25,7 @@ class RandomBallBuilder {
         for (int j = 0; j < i; j++) {
             Sphere sphere = new Sphere(10);
             findNonCollidingPlace(sphere, sphereList);
-            sphere.setMaterial(redMaterial);
+            sphere.setMaterial(ballMaterial);
             sphereList.add(sphere);
         }
         return sphereList;

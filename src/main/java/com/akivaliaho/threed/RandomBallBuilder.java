@@ -5,13 +5,11 @@ import javafx.scene.shape.Sphere;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-class RandomBallBuilder {
 
-    private static final int CONFLICT_CONSTANT = 10;
+class RandomBallBuilder extends RandomBuilder {
+
     private final CoordinateConstraint coordinateConstraint;
-    private Random random;
 
     RandomBallBuilder(CoordinateConstraint coordinateConstraint) {
         this.coordinateConstraint = coordinateConstraint;
@@ -20,8 +18,7 @@ class RandomBallBuilder {
     List<Sphere> generateRandomNumberOfBalls(Transformer edgeTransformer, PhongMaterial ballMaterial) {
 
         List<Sphere> sphereList = new ArrayList<>();
-        random = new Random();
-        int i = random.nextInt(10) + 2;
+        int i = nextInt(10) + 2;
         for (int j = 0; j < i; j++) {
             Sphere sphere = new Sphere(10);
             findNonCollidingPlace(sphere, sphereList);
@@ -83,7 +80,7 @@ class RandomBallBuilder {
         }
 
         private boolean checkForFlip() {
-            return random.nextInt(10) < 5;
+            return yesOrNo();
         }
 
         double getxTranslate() {
@@ -95,10 +92,11 @@ class RandomBallBuilder {
         }
 
         RandomTranslates invoke() {
-            yTranslate = random.nextDouble() * coordinateConstraint.getMaxY();
-            xTranslate = random.nextDouble() * coordinateConstraint.getMaxX();
-            zTranslate = random.nextDouble() * coordinateConstraint.getMaxZ();
+            yTranslate = nextDouble() * coordinateConstraint.getMaxY();
+            xTranslate = nextDouble() * coordinateConstraint.getMaxX();
+            zTranslate = nextDouble() * coordinateConstraint.getMaxZ();
             return this;
         }
+
     }
 }

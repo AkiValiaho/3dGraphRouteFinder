@@ -15,7 +15,7 @@ public class NodeBuilder {
     private static final double CAMERA_INITIAL_Y_ANGLE = 320.0;
     //Super-small clip to avoid that nasty non-transparent camera wall around x-axle
     private static final double CAMERA_NEAR_CLIP = Double.MIN_VALUE;
-    private static final double CAMERA_FAR_CLIP = 10000.0;
+    private static final double CAMERA_FAR_CLIP = 10000000.0;
     private static final double AXIS_LENGTH = 250.0;
     private static final double MOUSE_SPEED = 0.1;
     private static final double ROTATION_SPEED = 2.0;
@@ -130,12 +130,16 @@ public class NodeBuilder {
 
         Transformer edgeTransformer = new Transformer();
         graphTransformer.getChildren().add(edgeTransformer);
+        graphComponentGroup.setDepthTest(DepthTest.ENABLE);
+
         List<Sphere> spheres = new RandomBallBuilder(new CoordinateConstraint(100, 100, 100)).generateRandomNumberOfBalls(edgeTransformer, redMaterial);
         edgeTransformer.getChildren().addAll(spheres);
-        edgeTransformer.setTx(100);
+        edgeTransformer.setDepthTest(DepthTest.ENABLE);
+        List<DirectionalCylinder> directionalCylinders = new RandomVertexBuilder(spheres, blackmaterial).buildRandomVertexesBetweenEdges();
 
         Transformer verticeTransformer = new Transformer();
         edgeTransformer.getChildren().add(verticeTransformer);
+        verticeTransformer.getChildren().addAll(directionalCylinders);
 
         world.getChildren().add(graphComponentGroup);
     }

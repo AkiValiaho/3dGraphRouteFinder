@@ -1,11 +1,14 @@
 package com.akivaliaho.threed;
 
+import javafx.geometry.Point3D;
 import javafx.scene.*;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Sphere;
+import javafx.scene.transform.Translate;
 
 import java.util.List;
 
@@ -160,6 +163,10 @@ public class NodeBuilder {
         yAxis.setMaterial(greenMaterial);
         zAxis.setMaterial(blueMaterial);
 
+        Point3D xPoint = new Point3D(100, 0, 0);
+        Label xAxisLabel = new Label("x");
+        xAxisLabel.getTransforms().setAll(new Translate(xPoint.getX(), xPoint.getY()));
+        axisGroup.getChildren().add(xAxisLabel);
         axisGroup.getChildren().addAll(xAxis, yAxis, zAxis);
         axisGroup.setVisible(true);
         world.getChildren().addAll(axisGroup);

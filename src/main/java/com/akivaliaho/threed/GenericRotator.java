@@ -2,9 +2,13 @@ package com.akivaliaho.threed;
 
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
-import javafx.scene.Node;
+import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Sphere;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 class GenericRotator implements Runnable {
     private final DirectionalCylinder directionalCylinder;
     private final Point2D negativeYAxle;
@@ -31,35 +35,27 @@ class GenericRotator implements Runnable {
         );
 
         directionalCylinder.setHeight(distance);
-        combinedMatrixRotateNode(directionalCylinder, getPitch(toPoint, cylinderPoint), 0, 0);
-
+        rotateCylinder(directionalCylinder, cylinderPoint, toPoint);
+        System.out.println("Rotated");
     }
 
-    private double getPitch(Point3D toPoint, Point3D cylinderPoint) {
-        return Math.asin(Math.abs(toPoint.getY()) / toPoint.distance(0, 0, 0)) * 180 / Math.PI;
+    private void rotateCylinder(Cylinder directionalCylinder, Point3D origin, Point3D target) {
+        Point3D yAxis = new Point3D(0, 1, 0);
+        Point3D differenceVector = target.subtract(origin);
+        double height = differenceVector.magnitude();
+
+        Point3D mid = target.midpoint(origin);
+        Translate moveToMid = new Translate(mid.getX(), mid.getY(), mid.getZ());
+
+        Point3D rotationAxis = differenceVector.crossProduct(yAxis);
+        double angle = Math.acos(differenceVector.normalize().dotProduct(yAxis));
+        Rotate rotateAroundCenter = new Rotate(-Math.toDegrees(angle), rotationAxis);
+
+        directionalCylinder.setHeight(height);
+
+        directionalCylinder.getTransforms().addAll(rotateAroundCenter);
+        directionalCylinder.setTranslateX(moveToMid.getX());
+        directionalCylinder.setTranslateY(moveToMid.getY());
+        directionalCylinder.setTranslateZ(moveToMid.getZ());
     }
-
-
-    private void combinedMatrixRotateNode(Node n, double pitch, double yaw, double roll) {
-        //The combined X, Y and Z rotation matrix
-        double A11 = Math.cos(pitch) * Math.cos(roll);
-        double A12 = Math.cos(yaw) * Math.sin(pitch) + Math.cos(pitch) * Math.sin(yaw) * Math.sin(roll);
-        double A13 = Math.sin(pitch) * Math.sin(yaw) - Math.cos(pitch) * Math.cos(yaw) * Math.sin(roll);
-        double A21 = -Math.cos(roll) * Math.sin(pitch);
-        double A22 = Math.cos(pitch) * Math.cos(yaw) - Math.sin(pitch) * Math.sin(yaw) * Math.sin(roll);
-        double A23 = Math.cos(pitch) * Math.sin(yaw) + Math.cos(yaw) * Math.sin(pitch) * Math.sin(roll);
-        double A31 = Math.sin(roll);
-        double A32 = -Math.cos(roll) * Math.sin(yaw);
-        double A33 = Math.cos(yaw) * Math.cos(roll);
-
-        //The angle can be computed from arccos(1/2{A11 + A22 + A33 -1)
-        double d = Math.acos((A11 + A22 + A33 - 1d) / 2d);
-        if (d != 0d) {
-            double den = 2d * Math.sin(d);
-            Point3D p = new Point3D((A32 - A23) / den, (A13 - A31) / den, (A21 - A12) / den);
-            n.setRotationAxis(p);
-            n.setRotate(Math.toDegrees(d));
-        }
-    }
-
 }

@@ -60,6 +60,19 @@
         </plugins>
     </build>
     <dependencies>
+        <!--Slf4j-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.25</version>
+        </dependency>
+        <!--Lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.18</version>
+            <scope>provided</scope>
+        </dependency>
         <!-- MigLayout -->
         <dependency>
             <groupId>com.miglayout</groupId>

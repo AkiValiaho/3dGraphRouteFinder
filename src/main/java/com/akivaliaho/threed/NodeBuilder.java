@@ -135,13 +135,14 @@ public class NodeBuilder {
         List<Sphere> spheres = new RandomBallBuilder(new CoordinateConstraint(100, 100, 100)).generateRandomNumberOfBalls(edgeTransformer, redMaterial);
         edgeTransformer.getChildren().addAll(spheres);
         edgeTransformer.setDepthTest(DepthTest.ENABLE);
-        List<DirectionalCylinder> directionalCylinders = new RandomVertexBuilder(spheres, blackmaterial).buildRandomVertexesBetweenEdges();
 
         Transformer verticeTransformer = new Transformer();
         edgeTransformer.getChildren().add(verticeTransformer);
-        verticeTransformer.getChildren().addAll(directionalCylinders);
 
         world.getChildren().add(graphComponentGroup);
+        RandomVertexBuilder randomVertexBuilder = new RandomVertexBuilder(spheres, blackmaterial);
+        List<DirectionalCylinder> cylinders = randomVertexBuilder.buildRandomVertexesBetweenEdges();
+        verticeTransformer.getChildren().addAll(cylinders);
     }
 
     private void buildAxes() {

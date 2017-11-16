@@ -1,6 +1,5 @@
 package com.akivaliaho.threed;
 
-import javafx.geometry.Point2D;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
 
@@ -8,14 +7,18 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 class RandomVertexBuilder extends RandomBuilder {
     private final List<Sphere> spheres;
     private final PhongMaterial cylinderMaterial;
+    private final ExecutorService threadPool;
 
     RandomVertexBuilder(List<Sphere> spheres, PhongMaterial cylinderMaterial) {
         this.spheres = spheres;
         this.cylinderMaterial = cylinderMaterial;
+        this.threadPool = Executors.newCachedThreadPool();
     }
 
     List<DirectionalCylinder> buildRandomVertexesBetweenEdges() {
@@ -53,35 +56,11 @@ class RandomVertexBuilder extends RandomBuilder {
         DirectionalCylinder directionalCylinder = new DirectionalCylinder(1, 100);
         translateCylinderToFrom(from, directionalCylinder);
 
-        rotateCylinderTowardsTo(to, directionalCylinder);
+
+        threadPool.submit(new GenericRotator(to, directionalCylinder));
         directionalCylinder.setMaterial(cylinderMaterial);
         return directionalCylinder;
     }
-
-    private void rotateCylinderTowardsTo(Sphere to, DirectionalCylinder directionalCylinder) {
-        Point2D YAxle = new Point2D(0, 1);
-        Point2D negativeYAxle = new Point2D(0, -1);
-        Point2D cylinderPointXY = new Point2D(directionalCylinder.getTranslateX(), directionalCylinder.getTranslateY());
-
-        //Find closest angle to yAxle
-        double toTranslateX = to.getTranslateX();
-        double toTranslateY = to.getTranslateY();
-        double toTranslateZ = to.getTranslateZ();
-
-        Point2D toPointXY = new Point2D(toTranslateX, toTranslateY);
-
-        double value = setPerpendularAndFindRotation(directionalCylinder, toPointXY);
-
-//        directionalCylinder.getTransforms().add(new Rotate(value, 0, 0));
-        directionalCylinder.setHeight(toPointXY.distance(cylinderPointXY));
-
-    }
-
-    private double setPerpendularAndFindRotation(DirectionalCylinder directionalCylinder, Point2D toPointXY) {
-        ZRotator ZRotator = new ZRotator(directionalCylinder);
-        return ZRotator.findAngleTowardsPoint(toPointXY);
-    }
-
 
     private void translateCylinderToFrom(Sphere from, DirectionalCylinder directionalCylinder) {
         double translateX = from.getTranslateX();
@@ -91,6 +70,5 @@ class RandomVertexBuilder extends RandomBuilder {
         directionalCylinder.setTranslateY(translateY);
         directionalCylinder.setTranslateZ(translateZ);
     }
-
 
 }

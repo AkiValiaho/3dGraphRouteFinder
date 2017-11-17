@@ -1,5 +1,8 @@
 package com.akivaliaho.threed;
 
+import com.akivaliaho.CheckBallEvent;
+import com.akivaliaho.SphereEventHandler;
+import javafx.scene.SubScene;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
 
@@ -10,9 +13,11 @@ import java.util.List;
 class RandomBallBuilder extends RandomBuilder {
 
     private final CoordinateConstraint coordinateConstraint;
+    private final SubScene subScene;
 
-    RandomBallBuilder(CoordinateConstraint coordinateConstraint) {
+    RandomBallBuilder(CoordinateConstraint coordinateConstraint, SubScene subScene) {
         this.coordinateConstraint = coordinateConstraint;
+        this.subScene = subScene;
     }
 
     List<Sphere> generateRandomNumberOfBalls(Transformer edgeTransformer, PhongMaterial ballMaterial) {
@@ -23,6 +28,7 @@ class RandomBallBuilder extends RandomBuilder {
             Sphere sphere = new Sphere(10);
             findNonCollidingPlace(sphere, sphereList);
             sphere.setMaterial(ballMaterial);
+            sphere.addEventHandler(CheckBallEvent.checkBallEventEventType, new SphereEventHandler(subScene));
             sphereList.add(sphere);
         }
         return sphereList;

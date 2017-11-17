@@ -1,5 +1,6 @@
 package com.akivaliaho.threed;
 
+import com.akivaliaho.SphereEventHandler;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.control.Label;
@@ -31,16 +32,19 @@ public class NodeBuilder {
     final Transformer cameraTransformer2 = new Transformer();
     final Transformer cameraTransformer3 = new Transformer();
     private final SubScene subScene;
+    private final SphereEventHandler sphereEventHandler;
     double mousePosX;
     double mousePosY;
     double mouseOldX;
     double mouseOldY;
     double mouseDeltaX;
     double mouseDeltaY;
+    private Transformer edgeTransformer;
 
     //The subscene from main class
     public NodeBuilder(SubScene scene) {
         this.subScene = scene;
+        this.sphereEventHandler = new SphereEventHandler(subScene);
         Group root = new Group();
         root.getChildren().add(world);
         root.setDepthTest(DepthTest.ENABLE);
@@ -75,6 +79,7 @@ public class NodeBuilder {
             mousePosY = me.getSceneY();
             mouseOldX = me.getSceneX();
             mouseOldY = me.getSceneY();
+            sphereEventHandler.handle(me);
         });
         subScene.setOnMouseDragged(me -> {
             mouseOldX = mousePosX;
@@ -131,11 +136,12 @@ public class NodeBuilder {
         Transformer graphTransformer = new Transformer();
         graphComponentGroup.getChildren().add(graphTransformer);
 
-        Transformer edgeTransformer = new Transformer();
+        edgeTransformer = new Transformer();
         graphTransformer.getChildren().add(edgeTransformer);
         graphComponentGroup.setDepthTest(DepthTest.ENABLE);
 
-        List<Sphere> spheres = new RandomBallBuilder(new CoordinateConstraint(100, 100, 100)).generateRandomNumberOfBalls(edgeTransformer, redMaterial);
+        List<Sphere> spheres = new RandomBallBuilder(new CoordinateConstraint(100, 100, 100), subScene).generateRandomNumberOfBalls(edgeTransformer, redMaterial);
+        sphereEventHandler.setBalls(spheres);
         edgeTransformer.getChildren().addAll(spheres);
         edgeTransformer.setDepthTest(DepthTest.ENABLE);
 
@@ -143,7 +149,7 @@ public class NodeBuilder {
         edgeTransformer.getChildren().add(verticeTransformer);
 
         world.getChildren().add(graphComponentGroup);
-        RandomVertexBuilder randomVertexBuilder = new RandomVertexBuilder(spheres, blackmaterial);
+        RandomVertexBuilder randomVertexBuilder = new RandomVertexBuilder(spheres, blackmaterial, new SphereEventHandler(subScene));
         List<DirectionalCylinder> cylinders = randomVertexBuilder.buildRandomVertexesBetweenEdges();
         verticeTransformer.getChildren().addAll(cylinders);
     }

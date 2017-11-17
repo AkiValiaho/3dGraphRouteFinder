@@ -1,5 +1,6 @@
 package com.akivaliaho.threed;
 
+import com.akivaliaho.SphereEventHandler;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
 
@@ -15,7 +16,7 @@ class RandomVertexBuilder extends RandomBuilder {
     private final PhongMaterial cylinderMaterial;
     private final ExecutorService threadPool;
 
-    RandomVertexBuilder(List<Sphere> spheres, PhongMaterial cylinderMaterial) {
+    RandomVertexBuilder(List<Sphere> spheres, PhongMaterial cylinderMaterial, SphereEventHandler sphereEventHandler) {
         this.spheres = spheres;
         this.cylinderMaterial = cylinderMaterial;
         this.threadPool = Executors.newCachedThreadPool();

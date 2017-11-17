@@ -59,7 +59,7 @@ public class MainApp extends Application {
 
     private SubScene createSubScene(Scene scene) {
         StackPane pane = new StackPane();
-        SubScene subScene = new SubScene(pane, 500, 500, true, SceneAntialiasing.BALANCED);
+        SubScene subScene = new SubScene(pane, 500, 500, true, SceneAntialiasing.DISABLED);
         ReadOnlyDoubleProperty width = ((GridPane) scene.getRoot()).widthProperty();
         ReadOnlyDoubleProperty height = ((GridPane) scene.getRoot()).heightProperty();
 
@@ -71,6 +71,7 @@ public class MainApp extends Application {
     private void setSubsceneProperties(SubScene subScene, ReadOnlyDoubleProperty width, ReadOnlyDoubleProperty height) {
         subScene.widthProperty().bind(width);
         subScene.heightProperty().bind(height);
+        subScene.setPickOnBounds(true);
     }
 
     private void createStaticUIComponents(GridPane gridPane) {

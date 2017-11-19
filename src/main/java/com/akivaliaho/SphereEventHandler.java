@@ -1,18 +1,19 @@
 package com.akivaliaho;
 
 import javafx.event.EventHandler;
-import javafx.geometry.Point2D;
-import javafx.geometry.Point3D;
+import javafx.geometry.Bounds;
 import javafx.scene.SubScene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
+@Slf4j
 public class SphereEventHandler implements EventHandler<MouseEvent> {
 
     private final SubScene subScene;
@@ -24,25 +25,39 @@ public class SphereEventHandler implements EventHandler<MouseEvent> {
 
     @Override
     public void handle(MouseEvent event) {
+        log.info("Clicked at x: {}, y: {}", event.getScreenX(), event.getSceneY());
         //Check if any of the balls is contained in the click event
-        Point3D point3D = new Point3D(event.getSceneX(), event.getSceneY(), 0);
-        Point3D point3D1 = subScene.sceneToLocal(point3D);
-        Sphere containingBall = getContainingBall(event.getSceneX(), event.getSceneY());
+        Sphere containingBall = getContainingBall(event.getScreenX(), event.getScreenY());
         //Change sphere color to green
-        containingBall.setMaterial(new PhongMaterial(Color.GREEN));
+        if (containingBall != null) {
+            PhongMaterial greenMaterial = new PhongMaterial(Color.GREEN);
+            if (((PhongMaterial) containingBall.getMaterial()).getDiffuseColor().equals(Color.GREEN)) {
+                {
+                    containingBall.setMaterial(new PhongMaterial(Color.RED));
+                    return;
+                }
+            }
+            containingBall.setMaterial(greenMaterial);
+        }
     }
 
     private Sphere getContainingBall(double xCoordinate, double yCoordinate) {
         List<Sphere> containingBalls = new ArrayList<>();
         for (Sphere ball : balls) {
-            if (ball.getLayoutBounds().contains(new Point2D(xCoordinate, yCoordinate))) {
-                containingBalls.add(ball);
+            Bounds bounds = ball.localToScreen(ball.getBoundsInLocal());
+            log.info("Ball local bounds x: {} y: {}", bounds.getMaxX(), bounds.getMaxY());
+            if (bounds.contains(xCoordinate, yCoordinate)) {
+                log.info("Ball hit");
+               containingBalls.add(ball);
             }
         }
         if (containingBalls.size() > 1) {
             //TODO Find camera angle and get the closest one from z coordinates
             return containingBalls.get(0);
         } else {
+            if (containingBalls.size() == 0) {
+                return null;
+            }
             return containingBalls.get(0);
         }
     }

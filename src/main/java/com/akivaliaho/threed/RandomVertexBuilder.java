@@ -4,10 +4,7 @@ import com.akivaliaho.SphereEventHandler;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -15,11 +12,13 @@ class RandomVertexBuilder extends RandomBuilder {
     private final List<Sphere> spheres;
     private final PhongMaterial cylinderMaterial;
     private final ExecutorService threadPool;
+    private Map<Sphere, List<DirectionalCylinder>> ballsAndCylinders;
 
     RandomVertexBuilder(List<Sphere> spheres, PhongMaterial cylinderMaterial, SphereEventHandler sphereEventHandler) {
         this.spheres = spheres;
         this.cylinderMaterial = cylinderMaterial;
         this.threadPool = Executors.newCachedThreadPool();
+        this.ballsAndCylinders = new HashMap<>();
     }
 
     List<DirectionalCylinder> buildRandomVertexesBetweenEdges() {
@@ -54,12 +53,18 @@ class RandomVertexBuilder extends RandomBuilder {
     }
 
     private DirectionalCylinder buildCylinderToPopped(Sphere to, Sphere from) {
-        DirectionalCylinder directionalCylinder = new DirectionalCylinder(1, 100);
+        DirectionalCylinder directionalCylinder = new DirectionalCylinder(1, 100, from, to);
         translateCylinderToFrom(from, directionalCylinder);
-
-
         threadPool.submit(new GenericRotator(to, directionalCylinder));
         directionalCylinder.setMaterial(cylinderMaterial);
+        if (ballsAndCylinders.containsKey(from)) {
+            final List<DirectionalCylinder> directionalCylinders = ballsAndCylinders.get(from);
+            directionalCylinders.add(directionalCylinder);
+        } else {
+            List<DirectionalCylinder> cylinders = new ArrayList<>();
+            cylinders.add(directionalCylinder);
+            ballsAndCylinders.put(from, cylinders);
+        }
         return directionalCylinder;
     }
 

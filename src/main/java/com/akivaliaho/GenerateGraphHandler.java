@@ -4,11 +4,11 @@ import com.akivaliaho.threed.NodeBuilder;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 
-class GeneroiGraafiHandler implements EventHandler<MouseEvent> {
+class GenerateGraphHandler implements EventHandler<MouseEvent> {
 
     private final NodeBuilder nodeBuilder;
 
-    GeneroiGraafiHandler(NodeBuilder nodeBuilder) {
+    GenerateGraphHandler(NodeBuilder nodeBuilder) {
         this.nodeBuilder = nodeBuilder;
     }
 

@@ -89,8 +89,8 @@ public class MainApp extends Application {
     private List<Button> createButtons() {
         Button generoiGraafi = new Button(GENEROI_GRAAFI);
         Button etsiPolku = new Button(ETSI_POLKU);
-        generoiGraafi.addEventHandler(MouseEvent.MOUSE_CLICKED, new GeneroiGraafiHandler(nodeBuilder));
-        etsiPolku.addEventHandler(MouseEvent.MOUSE_CLICKED, new EtsiPolkuHandler());
+        generoiGraafi.addEventHandler(MouseEvent.MOUSE_CLICKED, new GenerateGraphHandler(nodeBuilder));
+        etsiPolku.addEventHandler(MouseEvent.MOUSE_CLICKED, new FindPathHandler());
         List<Button> objects = new ArrayList<>();
         objects.add(generoiGraafi);
         objects.add(etsiPolku);

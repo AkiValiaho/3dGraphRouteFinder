@@ -1,10 +1,12 @@
 package com.akivaliaho.threed;
 
 import com.akivaliaho.SphereEventHandler;
+import com.akivaliaho.graph.Edge;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 class RandomVertexBuilder extends RandomBuilder {
     private final List<Sphere> spheres;
@@ -22,6 +24,17 @@ class RandomVertexBuilder extends RandomBuilder {
         Deque<Sphere> sphereDeque = new ArrayDeque<>(spheres);
         buildBetweenEdges(cylinders, sphereDeque);
         return cylinders;
+    }
+
+    List<Edge> getEdges() {
+        return ballsAndCylinders.entrySet()
+                .stream()
+                .map(this::createEdge)
+                .collect(Collectors.toList());
+    }
+
+    private Edge createEdge(Map.Entry<Sphere, List<DirectionalCylinder>> sphereListEntry) {
+        return new Edge(sphereListEntry);
     }
 
     private void buildBetweenEdges(List<DirectionalCylinder> cylinders, Deque<Sphere> sphereDeque) {

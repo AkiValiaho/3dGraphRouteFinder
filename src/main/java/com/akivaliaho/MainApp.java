@@ -87,13 +87,13 @@ public class MainApp extends Application {
     }
 
     private List<Button> createButtons() {
-        Button generoiGraafi = new Button(GENEROI_GRAAFI);
-        Button etsiPolku = new Button(ETSI_POLKU);
-        generoiGraafi.addEventHandler(MouseEvent.MOUSE_CLICKED, new GenerateGraphHandler(nodeBuilder));
-        etsiPolku.addEventHandler(MouseEvent.MOUSE_CLICKED, new FindPathHandler());
+        Button generateGraph = new Button(GENEROI_GRAAFI);
+        Button findPath = new Button(ETSI_POLKU);
+        generateGraph.addEventHandler(MouseEvent.MOUSE_CLICKED, new GenerateGraphHandler(nodeBuilder));
+        findPath.addEventHandler(MouseEvent.MOUSE_CLICKED, new FindPathHandler(nodeBuilder));
         List<Button> objects = new ArrayList<>();
-        objects.add(generoiGraafi);
-        objects.add(etsiPolku);
+        objects.add(generateGraph);
+        objects.add(findPath);
         return objects;
     }
 

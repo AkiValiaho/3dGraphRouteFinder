@@ -3,7 +3,7 @@ package com.akivaliaho.threed;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Sphere;
 
-class DirectionalCylinder extends Cylinder {
+public class DirectionalCylinder extends Cylinder {
     private final Sphere fromEdge;
     private final Sphere toEdge;
 

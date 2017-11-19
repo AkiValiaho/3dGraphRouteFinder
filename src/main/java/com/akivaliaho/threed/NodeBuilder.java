@@ -1,6 +1,7 @@
 package com.akivaliaho.threed;
 
 import com.akivaliaho.SphereEventHandler;
+import com.akivaliaho.graph.Edge;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.control.Label;
@@ -40,6 +41,7 @@ public class NodeBuilder {
     double mouseDeltaX;
     double mouseDeltaY;
     private Transformer edgeTransformer;
+    private RandomVertexBuilder randomVertexBuilder;
 
     //The subscene from main class
     public NodeBuilder(SubScene scene) {
@@ -140,7 +142,8 @@ public class NodeBuilder {
         graphTransformer.getChildren().add(edgeTransformer);
         graphComponentGroup.setDepthTest(DepthTest.ENABLE);
 
-        List<Sphere> spheres = new RandomBallBuilder(new CoordinateConstraint(100, 100, 100), subScene).generateRandomNumberOfBalls(edgeTransformer, redMaterial);
+        List<Sphere> spheres = new RandomBallBuilder(new CoordinateConstraint(100, 100, 100), subScene)
+                .generateRandomNumberOfBalls(edgeTransformer, redMaterial);
         sphereEventHandler.setBalls(spheres);
         edgeTransformer.getChildren().addAll(spheres);
         edgeTransformer.setDepthTest(DepthTest.ENABLE);
@@ -149,7 +152,7 @@ public class NodeBuilder {
         edgeTransformer.getChildren().add(verticeTransformer);
 
         world.getChildren().add(graphComponentGroup);
-        RandomVertexBuilder randomVertexBuilder = new RandomVertexBuilder(spheres, blackmaterial, new SphereEventHandler(subScene));
+        randomVertexBuilder = new RandomVertexBuilder(spheres, blackmaterial, new SphereEventHandler(subScene));
         List<DirectionalCylinder> cylinders = randomVertexBuilder.buildRandomVertexesBetweenEdges();
         verticeTransformer.getChildren().addAll(cylinders);
     }
@@ -185,4 +188,7 @@ public class NodeBuilder {
         return blueMaterial;
     }
 
+    public List<Edge> getEdges() {
+        return randomVertexBuilder.getEdges();
+    }
 }

@@ -9,7 +9,7 @@ import javafx.scene.transform.Translate;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-class GenericRotator implements Runnable {
+class GenericRotator {
     private final DirectionalCylinder directionalCylinder;
     private final Point2D negativeYAxle;
     private final Point2D yAxle;
@@ -21,13 +21,7 @@ class GenericRotator implements Runnable {
         yAxle = new Point2D(0, 1);
         negativeYAxle = new Point2D(0, -1);
     }
-
-    @Override
-    public void run() {
-        rotateCylinderTowardsTo();
-    }
-
-    private void rotateCylinderTowardsTo() {
+    public void rotateCylinderTowardsTo() {
         Point3D toPoint = new Point3D(to.getTranslateX(), to.getTranslateY(), to.getTranslateZ());
         Point3D cylinderPoint = new Point3D(directionalCylinder.getTranslateX(), directionalCylinder.getTranslateY(), directionalCylinder.getTranslateZ());
         double distance = toPoint.distance(

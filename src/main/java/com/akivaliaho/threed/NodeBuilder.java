@@ -174,7 +174,7 @@ public class NodeBuilder {
         xAxisLabel.getTransforms().setAll(new Translate(xPoint.getX(), xPoint.getY()));
         axisGroup.getChildren().add(xAxisLabel);
         axisGroup.getChildren().addAll(xAxis, yAxis, zAxis);
-        axisGroup.setVisible(true);
+        axisGroup.setVisible(false);
         world.getChildren().addAll(axisGroup);
     }
 

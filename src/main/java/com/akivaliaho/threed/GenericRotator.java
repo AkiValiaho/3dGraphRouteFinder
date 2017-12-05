@@ -9,13 +9,13 @@ import javafx.scene.transform.Translate;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-class GenericRotator {
+public class GenericRotator {
     private final DirectionalCylinder directionalCylinder;
     private final Point2D negativeYAxle;
     private final Point2D yAxle;
     private final Sphere to;
 
-    GenericRotator(Sphere to, DirectionalCylinder directionalCylinder) {
+    public GenericRotator(Sphere to, DirectionalCylinder directionalCylinder) {
         this.to = to;
         this.directionalCylinder = directionalCylinder;
         yAxle = new Point2D(0, 1);

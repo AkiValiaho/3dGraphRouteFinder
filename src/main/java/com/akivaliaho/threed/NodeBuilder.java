@@ -132,7 +132,7 @@ public class NodeBuilder {
         buildAxes();
         final PhongMaterial redMaterial = createMaterial(Color.DARKRED, Color.RED);
 
-        final PhongMaterial blackmaterial = createMaterial(Color.BLACK, Color.BLANCHEDALMOND);
+        final PhongMaterial blackmaterial = createMaterial(Color.CYAN, Color.BLANCHEDALMOND);
 
         Transformer graphComponentGroup = new Transformer();
         Transformer graphTransformer = new Transformer();

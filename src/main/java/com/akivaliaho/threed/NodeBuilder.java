@@ -140,7 +140,9 @@ public class NodeBuilder {
         graphTransformer.getChildren().add(edgeTransformer);
         graphComponentGroup.setDepthTest(DepthTest.ENABLE);
 
-        List<Sphere> spheres = new RandomBallBuilder(new CoordinateConstraint(100, 100, 100), subScene).generateRandomNumberOfBalls(edgeTransformer, redMaterial);
+        List<Sphere> spheres = new RandomBallBuilder(subScene,
+                new RandomTranslates(new CoordinateConstraint(100, 100, 100)))
+                .generateRandomNumberOfBalls(redMaterial);
         sphereEventHandler.setBalls(spheres);
         edgeTransformer.getChildren().addAll(spheres);
         edgeTransformer.setDepthTest(DepthTest.ENABLE);

@@ -9,19 +9,21 @@ import javafx.scene.shape.Sphere;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 
 class RandomBallBuilder extends RandomBuilder {
 
-    private final CoordinateConstraint coordinateConstraint;
     private final SubScene subScene;
+    private final RandomTranslates randomTranslates;
 
-    RandomBallBuilder(CoordinateConstraint coordinateConstraint, SubScene subScene) {
-        this.coordinateConstraint = coordinateConstraint;
+    RandomBallBuilder(SubScene subScene, RandomTranslates randomTranslates) {
         this.subScene = subScene;
+        this.randomTranslates = randomTranslates;
     }
 
-    List<Sphere> generateRandomNumberOfBalls(Transformer edgeTransformer, PhongMaterial ballMaterial) {
-
+    List<Sphere> generateRandomNumberOfBalls(PhongMaterial ballMaterial) {
+        checkNotNull(ballMaterial);
         List<Sphere> sphereList = new ArrayList<>();
         int i = nextInt(10) + 2;
         for (int j = 0; j < i; j++) {
@@ -46,8 +48,6 @@ class RandomBallBuilder extends RandomBuilder {
     }
 
     private void setRandomTranslates(Sphere sphere) {
-
-        RandomTranslates randomTranslates = new RandomTranslates().invoke();
         sphere.setTranslateY(randomTranslates.getyTranslate());
         sphere.setTranslateX(randomTranslates.getxTranslate());
         sphere.setTranslateZ(randomTranslates.getzTranslate());
@@ -75,38 +75,4 @@ class RandomBallBuilder extends RandomBuilder {
         return Math.abs(instanceTranslateZ - translateZ) < 5 || Math.abs(instanceTranslateY - translateY) < 5 || Math.abs(instanceTranslateX - translateX) < 5;
     }
 
-
-    private class RandomTranslates {
-        private double yTranslate;
-        private double xTranslate;
-        private double zTranslate;
-
-        double getyTranslate() {
-            return translate(yTranslate);
-        }
-
-        private double translate(double translate) {
-            return checkForFlip() ? -translate : translate;
-        }
-
-        private boolean checkForFlip() {
-            return yesOrNo();
-        }
-
-        double getxTranslate() {
-            return translate(xTranslate);
-        }
-
-        double getzTranslate() {
-            return translate(zTranslate);
-        }
-
-        RandomTranslates invoke() {
-            yTranslate = nextDouble() * coordinateConstraint.getMaxY();
-            xTranslate = nextDouble() * coordinateConstraint.getMaxX();
-            zTranslate = nextDouble() * coordinateConstraint.getMaxZ();
-            return this;
-        }
-
-    }
 }

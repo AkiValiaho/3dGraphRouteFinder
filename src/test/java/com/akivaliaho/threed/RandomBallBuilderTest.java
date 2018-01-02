@@ -20,13 +20,17 @@ public class RandomBallBuilderTest {
     @Before
     public void setUp() throws Exception {
         CoordinateConstraint coordinateConstraint = new CoordinateConstraint(300, 300, 300);
-        this.randomBallBuilder = new RandomBallBuilder(coordinateConstraint, mock(SubScene.class));
+        this.randomBallBuilder = new RandomBallBuilder(mock(SubScene.class), new RandomTranslates(coordinateConstraint));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void generateRandomNumberOfBalls_emptymaterial_shouldThrowException() {
+        List<Sphere> spheres = randomBallBuilder.generateRandomNumberOfBalls(null);
     }
 
     @Test
     public void generateRandomNumberOfBalls() {
-        Transformer transformer = new Transformer();
-        List<Sphere> spheres = randomBallBuilder.generateRandomNumberOfBalls(transformer, new PhongMaterial(Color.RED));
+        List<Sphere> spheres = randomBallBuilder.generateRandomNumberOfBalls(new PhongMaterial(Color.RED));
         assertNotEmpty(spheres);
     }
 

@@ -27,13 +27,17 @@ public class GenericRotatorTest {
     @Test
     public void rotateCylinderTowardsTo() {
         this.genericRotator.rotateCylinderTowardsTo();
-        assertEquals(directionalCylinder.getTranslateX(), 50, 0.0);
-        assertEquals(directionalCylinder.getTranslateY(), 50, 0.0);
-        assertEquals(directionalCylinder.getTranslateZ(), 50, 0.0);
+        assertTranslates();
         //Check distance matches
         Clean3DPoint to = new Clean3DPoint(this.to);
         Clean3DPoint from = new Clean3DPoint(this.from);
         double distance = to.distance(from);
         assertEquals(distance, directionalCylinder.getHeight(), 0);
+    }
+
+    private void assertTranslates() {
+        assertEquals(directionalCylinder.getTranslateX(), 50, 0.0);
+        assertEquals(directionalCylinder.getTranslateY(), 50, 0.0);
+        assertEquals(directionalCylinder.getTranslateZ(), 50, 0.0);
     }
 }

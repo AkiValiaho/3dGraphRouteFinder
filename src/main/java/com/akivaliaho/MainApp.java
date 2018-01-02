@@ -24,6 +24,7 @@ import java.util.List;
 
 public class MainApp extends Application {
 
+    public static final String APP_NAME = "Reitinhakualgoritmien visualisoija";
     private static final String GENEROI_GRAAFI = "Generoi graafi";
     private static final int ACCORDION_COLUMN_INDEX = 0;
     private static final int ACCORDION_ROW_INDEX = 1;
@@ -51,7 +52,7 @@ public class MainApp extends Application {
 
         //Generate threed axes and a default graph for the subscene
         scene.getStylesheets().add("/styles/styles.css");
-        stage.setTitle("Reitinhakualgoritmien visualisoija");
+        stage.setTitle(APP_NAME);
         stage.setScene(scene);
 
         stage.show();

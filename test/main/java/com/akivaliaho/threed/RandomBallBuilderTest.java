@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static com.akivaliaho.TestUtils.assertNotEmpty;
+import static com.akivaliaho.BooleanUtils.assertNotEmpty;
 import static org.mockito.Mockito.mock;
 
 public class RandomBallBuilderTest {

@@ -25,13 +25,17 @@ class RandomBallBuilder extends RandomBuilder {
         List<Sphere> sphereList = new ArrayList<>();
         int i = nextInt(10) + 2;
         for (int j = 0; j < i; j++) {
-            Sphere sphere = new Sphere(10);
-            findNonCollidingPlace(sphere, sphereList);
-            sphere.setMaterial(ballMaterial);
-            sphere.addEventHandler(CheckBallEvent.checkBallEventEventType, new SphereEventHandler(subScene));
-            sphereList.add(sphere);
+            addGeneratedBallToList(ballMaterial, sphereList);
         }
         return sphereList;
+    }
+
+    private void addGeneratedBallToList(PhongMaterial ballMaterial, List<Sphere> sphereList) {
+        Sphere sphere = new Sphere(10);
+        findNonCollidingPlace(sphere, sphereList);
+        sphere.setMaterial(ballMaterial);
+        sphere.addEventHandler(CheckBallEvent.checkBallEventEventType, new SphereEventHandler(subScene));
+        sphereList.add(sphere);
     }
 
     private void findNonCollidingPlace(Sphere sphere, List<Sphere> sphereList) {

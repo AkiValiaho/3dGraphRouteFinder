@@ -21,13 +21,13 @@ class GenericRotator {
         yAxle = new Point2D(0, 1);
         negativeYAxle = new Point2D(0, -1);
     }
+
     public void rotateCylinderTowardsTo() {
-        Point3D toPoint = new Point3D(to.getTranslateX(), to.getTranslateY(), to.getTranslateZ());
-        Point3D cylinderPoint = new Point3D(directionalCylinder.getTranslateX(), directionalCylinder.getTranslateY(), directionalCylinder.getTranslateZ());
+        Point3D toPoint = new Clean3DPoint(to);
+        Point3D cylinderPoint = new Clean3DPoint(directionalCylinder);
         double distance = toPoint.distance(
                 cylinderPoint
         );
-
         directionalCylinder.setHeight(distance);
         rotateCylinder(directionalCylinder, cylinderPoint, toPoint);
         System.out.println("Rotated");

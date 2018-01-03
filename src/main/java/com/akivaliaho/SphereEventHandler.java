@@ -17,16 +17,24 @@ import java.util.List;
 public class SphereEventHandler implements EventHandler<MouseEvent> {
 
     private final SubScene subScene;
-    private List<Sphere> balls;
+    private List<Sphere> spheres;
 
-    public SphereEventHandler(SubScene subScene) {
+    public SphereEventHandler(SubScene subScene, List<Sphere> spheres) {
         this.subScene = subScene;
+        this.spheres = spheres;
+        //Add event handler to the spheres
+        addEventHandler(spheres);
+    }
+
+    private void addEventHandler(List<Sphere> spheres) {
+        spheres.stream()
+                .forEach(sphere -> sphere.addEventHandler(CheckBallEvent.checkBallEventEventType, this));
     }
 
     @Override
     public void handle(MouseEvent event) {
         log.info("Clicked at x: {}, y: {}", event.getScreenX(), event.getSceneY());
-        //Check if any of the balls is contained in the click event
+        //Check if any of the spheres is contained in the click event
         Sphere containingBall = getContainingBall(event.getScreenX(), event.getScreenY());
         //Change sphere color to green
         if (containingBall != null) {
@@ -43,12 +51,12 @@ public class SphereEventHandler implements EventHandler<MouseEvent> {
 
     private Sphere getContainingBall(double xCoordinate, double yCoordinate) {
         List<Sphere> containingBalls = new ArrayList<>();
-        for (Sphere ball : balls) {
-            Bounds bounds = ball.localToScreen(ball.getBoundsInLocal());
+        for (Sphere sphere : spheres) {
+            Bounds bounds = sphere.localToScreen(sphere.getBoundsInLocal());
             log.info("Ball local bounds x: {} y: {}", bounds.getMaxX(), bounds.getMaxY());
             if (bounds.contains(xCoordinate, yCoordinate)) {
-                log.info("Ball hit");
-               containingBalls.add(ball);
+                log.info("Ball hit at X: {}, Y:  {}", xCoordinate, yCoordinate);
+                containingBalls.add(sphere);
             }
         }
         if (containingBalls.size() > 1) {
@@ -60,9 +68,5 @@ public class SphereEventHandler implements EventHandler<MouseEvent> {
             }
             return containingBalls.get(0);
         }
-    }
-
-    public void setBalls(List<Sphere> balls) {
-        this.balls = balls;
     }
 }

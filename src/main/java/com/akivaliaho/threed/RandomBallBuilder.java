@@ -1,7 +1,5 @@
 package com.akivaliaho.threed;
 
-import com.akivaliaho.CheckBallEvent;
-import com.akivaliaho.SphereEventHandler;
 import javafx.scene.SubScene;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
@@ -36,7 +34,6 @@ class RandomBallBuilder extends RandomBuilder {
         Sphere sphere = new Sphere(10);
         findNonCollidingPlace(sphere, sphereList);
         sphere.setMaterial(ballMaterial);
-        sphere.addEventHandler(CheckBallEvent.checkBallEventEventType, new SphereEventHandler(subScene));
         sphereList.add(sphere);
     }
 

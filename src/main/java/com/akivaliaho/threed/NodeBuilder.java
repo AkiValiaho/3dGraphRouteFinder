@@ -32,19 +32,18 @@ public class NodeBuilder {
     final Transformer cameraTransformer2 = new Transformer();
     final Transformer cameraTransformer3 = new Transformer();
     private final SubScene subScene;
-    private final SphereEventHandler sphereEventHandler;
     double mousePosX;
     double mousePosY;
     double mouseOldX;
     double mouseOldY;
     double mouseDeltaX;
     double mouseDeltaY;
+    private SphereEventHandler sphereEventHandler;
     private Transformer edgeTransformer;
 
     //The subscene from main class
     public NodeBuilder(SubScene scene) {
         this.subScene = scene;
-        this.sphereEventHandler = new SphereEventHandler(subScene);
         Group root = new Group();
         root.getChildren().add(world);
         root.setDepthTest(DepthTest.ENABLE);
@@ -143,7 +142,7 @@ public class NodeBuilder {
         List<Sphere> spheres = new RandomBallBuilder(subScene,
                 new RandomTranslates(new CoordinateConstraint(100, 100, 100)))
                 .generateRandomNumberOfBalls(redMaterial);
-        sphereEventHandler.setBalls(spheres);
+        sphereEventHandler = new SphereEventHandler(subScene, spheres);
         edgeTransformer.getChildren().addAll(spheres);
         edgeTransformer.setDepthTest(DepthTest.ENABLE);
 
@@ -151,7 +150,7 @@ public class NodeBuilder {
         edgeTransformer.getChildren().add(verticeTransformer);
 
         world.getChildren().add(graphComponentGroup);
-        RandomVertexBuilder randomVertexBuilder = new RandomVertexBuilder(spheres, blackmaterial, new SphereEventHandler(subScene));
+        RandomVertexBuilder randomVertexBuilder = new RandomVertexBuilder(spheres, blackmaterial, sphereEventHandler);
         List<DirectionalCylinder> cylinders = randomVertexBuilder.buildRandomVertexesBetweenEdges();
         verticeTransformer.getChildren().addAll(cylinders);
     }

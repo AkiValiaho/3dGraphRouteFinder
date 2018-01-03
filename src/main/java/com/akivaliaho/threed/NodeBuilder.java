@@ -50,6 +50,7 @@ public class NodeBuilder {
 
         buildCamera(root);
         buildGraph();
+        buildAxes();
 
         handleKeyboard(world);
         handleMouse(world);
@@ -127,7 +128,6 @@ public class NodeBuilder {
         //Kill all old edges and vertices from the graph
         world.getChildren().clear();
         world.getChildren().add(axisGroup);
-        buildAxes();
         final PhongMaterial redMaterial = createMaterial(Color.DARKRED, Color.RED);
 
         final PhongMaterial blackmaterial = createMaterial(Color.BLACK, Color.BLANCHEDALMOND);
@@ -176,6 +176,7 @@ public class NodeBuilder {
         xAxisLabel.getTransforms().setAll(new Translate(xPoint.getX(), xPoint.getY()));
         axisGroup.getChildren().add(xAxisLabel);
         axisGroup.getChildren().addAll(xAxis, yAxis, zAxis);
+        axisGroup.setVisible(false);
     }
 
     private PhongMaterial createMaterial(Color diffuseColor, Color specularColor) {

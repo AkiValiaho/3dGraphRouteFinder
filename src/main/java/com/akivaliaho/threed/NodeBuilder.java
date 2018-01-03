@@ -126,6 +126,7 @@ public class NodeBuilder {
     public void buildGraph() {
         //Kill all old edges and vertices from the graph
         world.getChildren().clear();
+        world.getChildren().add(axisGroup);
         buildAxes();
         final PhongMaterial redMaterial = createMaterial(Color.DARKRED, Color.RED);
 
@@ -175,8 +176,6 @@ public class NodeBuilder {
         xAxisLabel.getTransforms().setAll(new Translate(xPoint.getX(), xPoint.getY()));
         axisGroup.getChildren().add(xAxisLabel);
         axisGroup.getChildren().addAll(xAxis, yAxis, zAxis);
-        axisGroup.setVisible(false);
-        world.getChildren().addAll(axisGroup);
     }
 
     private PhongMaterial createMaterial(Color diffuseColor, Color specularColor) {
@@ -186,4 +185,11 @@ public class NodeBuilder {
         return blueMaterial;
     }
 
+    public void toggleAxisVisibility() {
+        if (axisGroup.isVisible()) {
+            axisGroup.setVisible(false);
+        } else {
+            axisGroup.setVisible(true);
+        }
+    }
 }

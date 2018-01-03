@@ -33,6 +33,7 @@ public class MainApp extends Application {
     private static final int SUBSCENE_ROW_INDEX = 0;
     private static final Logger log = LoggerFactory.getLogger(MainApp.class);
     private static final String ETSI_POLKU = "Etsi polku";
+    private static final String TOGGLE_AXIS_VISIBILITY = "Näytä koordinaatisto";
     private NodeBuilder nodeBuilder;
 
     public static void main(String[] args) throws Exception {
@@ -90,11 +91,14 @@ public class MainApp extends Application {
     private List<Button> createButtons() {
         Button generoiGraafi = new Button(GENEROI_GRAAFI);
         Button etsiPolku = new Button(ETSI_POLKU);
+        Button toggleAxis = new Button(TOGGLE_AXIS_VISIBILITY);
         generoiGraafi.addEventHandler(MouseEvent.MOUSE_CLICKED, new GenerateGraphHandler(nodeBuilder));
         etsiPolku.addEventHandler(MouseEvent.MOUSE_CLICKED, new FindPathHandler());
+        toggleAxis.addEventHandler(MouseEvent.MOUSE_CLICKED, new ToggleAxisHandler(nodeBuilder));
         List<Button> objects = new ArrayList<>();
         objects.add(generoiGraafi);
         objects.add(etsiPolku);
+        objects.add(toggleAxis);
         return objects;
     }
 
